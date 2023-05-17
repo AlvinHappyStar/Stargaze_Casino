@@ -3,8 +3,8 @@ import { Button, Container } from "@mui/material";
 import { toast } from "react-toastify";
 
 import Navbar from "../../components/navbar";
-import SelectBet from "../../components/rps/selectBet";
-import CheckBet from "../../components/rps/checkBet";
+import SelectBet from "../../components/flip/selectBet";
+import CheckBet from "../../components/flip/checkBet";
 
 import { useSigningClient } from '../../contexts/cosmwasm'
 
@@ -17,7 +17,7 @@ function Play() {
   const { 
     walletAddress,
     signingClient,
-    executeRPS
+    executeFlip
 
   } = useSigningClient()
 
@@ -36,7 +36,7 @@ function Play() {
       return;
     }
     if (currentBetType === "") {
-      toast.warning("Please select rock, paper or scissors .");
+      toast.warning("Please select HEAD or TAIL .");
       return;
     }
 
@@ -45,14 +45,12 @@ function Play() {
       return
     }
 
-    let gameResult = 3;
+    let gameResult = 0;
 
-    if (currentBetType === "rock")
-      gameResult = await executeRPS(0, currentBetPrice);
-    else if(currentBetType === "scissors")
-      gameResult = await executeRPS(1, currentBetPrice);
-    else if(currentBetType === "paper")
-      gameResult = await executeRPS(2, currentBetPrice);
+    // if (currentBetType === "head")
+    //   gameResult = await executeFlip(0, currentBetPrice);
+    // else if(currentBetType === "tail")
+    //   gameResult = await executeFlip(1, currentBetPrice);
     
     console.log("--------gameresult------", gameResult);
     setLastResult(gameResult);

@@ -1,7 +1,7 @@
-import { useState,  useContext } from 'react'
+import { useState } from 'react'
 import { connectKeplr } from '../services/keplr'
 import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { fromBase64, toBase64 } from '@cosmjs/encoding'
+
 import {
   convertMicroDenomToDenom,
   convertDenomToMicroDenom,
@@ -15,7 +15,7 @@ import {
   NEXT_PUBLIC_STAKING_DENOM,
   NEXT_PUBLIC_COINFLIP_CONTRACT
 } from '../config'
-import { NotificationContainer, NotificationManager } from 'react-notifications'
+import { NotificationManager } from 'react-notifications'
 // import { create } from 'ipfs-http-client'
 import { coin } from '@cosmjs/launchpad'
 
@@ -45,7 +45,7 @@ export const useSigningCosmWasmClient = () => {
   const [nativeBalance, setNativeBalance] = useState(0)
 
   const [config, setConfig] = useState({ owner: '', enabled: true, denom: null, treasury_amount: 0, flip_count: 0 })
-  const [historyList, setHistoryList] = useState([])
+  const [RPShistoryList, setHistoryList] = useState([])
 
   // const { success: successNotification, error: errorNotification } = useNotification()
 
@@ -152,7 +152,7 @@ export const useSigningCosmWasmClient = () => {
         config: {}
       })
       setConfig(response)
-      setIsAdmin(response.owner == walletAddress)
+      setIsAdmin(response.owner === walletAddress)
       setLoading(false)
       notify(true, `Successfully got config`)
     } catch (error) {
@@ -167,7 +167,7 @@ export const useSigningCosmWasmClient = () => {
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
 
-  const executeFlip = async (level, price) => {
+  const executeRPS = async (level, price) => {
     setLoading(true)
     try {
 
@@ -175,7 +175,7 @@ export const useSigningCosmWasmClient = () => {
         walletAddress, // sender address
         PUBLIC_COINFLIP_CONTRACT, // token escrow contract
         {
-          "flip":
+          "rps":
           {
             "level": level,
           }
@@ -244,7 +244,7 @@ export const useSigningCosmWasmClient = () => {
   ////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
 
-  const getHistory = async () => {
+  const getRPSHistory = async () => {
     setLoading(true)
     try {
       const response = await signingClient.queryContractSmart(PUBLIC_COINFLIP_CONTRACT, {
@@ -282,10 +282,10 @@ export const useSigningCosmWasmClient = () => {
     nativeBalanceStr,
     nativeBalance,
 
-    executeFlip,
+    executeRPS,
     executeRemoveTreasury,
 
-    getHistory,
-    historyList
+    getRPSHistory,
+    RPShistoryList
   }
 }

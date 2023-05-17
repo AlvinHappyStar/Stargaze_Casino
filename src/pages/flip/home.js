@@ -7,6 +7,8 @@ import { useSigningClient } from '../../contexts/cosmwasm'
 
 import dayjs from 'dayjs'
 
+import { BET_TYPE_PAPER, BET_TYPE_ROCK, BET_TYPE_SCISSORS } from "../../config";
+
 function Home() {
   const navigate = useNavigate();
 
@@ -15,29 +17,29 @@ function Home() {
   var relativeTime = require('dayjs/plugin/relativeTime')
   dayjs.extend(relativeTime)
 
-  const { 
-    walletAddress,
-    signingClient,
-    getRPSHistory,
-    RPShistoryList
+  // const { 
+  //   walletAddress,
+  //   signingClient,
+  //   getHistory,
+  //   historyList
 
-  } = useSigningClient()
+  // } = useSigningClient()
 
-  useEffect(() => {
-    if (!signingClient || walletAddress.length === 0) {      
-      setPlayHistory(null)
-      return
-    }
+  // useEffect(() => {
+  //   if (!signingClient || walletAddress.length === 0) {      
+  //     setPlayHistory(null)
+  //     return
+  //   }
     
-    getRPSHistory();
-  }, [signingClient, walletAddress])
+  //   getHistory();
+  // }, [signingClient, walletAddress])
 
-  useEffect(() => {
-    if (RPShistoryList === null) {
-      return
-    }
-    setPlayHistory(RPShistoryList)
-  }, [RPShistoryList])
+  // useEffect(() => {
+  //   if (historyList == null) {
+  //     return
+  //   }
+  //   setPlayHistory(historyList)
+  // }, [historyList])
 
   return (
     <>
@@ -60,7 +62,7 @@ function Home() {
             marginTop: { xs: "36px", sm: "42px", md: "90px" },
           }}
         >
-          ROCK PAPER SCISSORS
+          COIN FLIP
           <br />
           YOUR WAY TO RICHES!
         </Typography>
@@ -79,7 +81,7 @@ function Home() {
             },
           }}
           onClick={() => {
-            navigate("/rps_play");
+            navigate("/flip_play");
           }}
         >
           Play
@@ -149,7 +151,7 @@ function Home() {
                         color: "black",
                       }}
                     >
-                      PLAYED {item.level === 0 ? 'ROCK' : (item.level === 1 ? 'SCISSORS' : 'PAPER')} FOR
+                      PLAYED {item.level == 0 ? 'ROCK' : (item.level == 1 ? 'SCISSORS' : 'PAPER')} FOR
                     </Typography>
                     <Typography
                       sx={{
@@ -157,7 +159,7 @@ function Home() {
                         color: "black",
                       }}
                     >
-                      {item.level === 0 ? 'ROCK' : (item.level === 1 ? 'SCISSORS' : 'PAPER')}
+                      {item.level == 0 ? 'ROCK' : (item.level == 1 ? 'SCISSORS' : 'PAPER')}
                     </Typography>
                     <Typography
                       sx={{
@@ -176,10 +178,10 @@ function Home() {
                     </Typography>
                     <Typography
                       sx={{
-                        color: item.win === 0 ? "#1CC700" : "#FF0000",
+                        color: item.win == 0 ? "#1CC700" : "#FF0000",
                       }}
                     >
-                      {item.win === 0 ? "WON" : (item.win === 1 ? "TIE" :"LOST")}
+                      {item.win == 0 ? "WON" : (item.win == 1 ? "TIE" :"LOST")}
                     </Typography>
                   </Box>
                   <Typography
@@ -214,3 +216,30 @@ function Home() {
 }
 
 export default Home;
+
+const tempPlayHistory = [
+  {
+    playerId: "0xMERT",
+    betType: BET_TYPE_ROCK,
+    betAmount: 0.25,
+    isWin: true,
+  },
+  {
+    playerId: "0xMBEK",
+    betType: BET_TYPE_PAPER,
+    betAmount: 0.5,
+    isWin: true,
+  },
+  {
+    playerId: "0xCLOK",
+    betType: BET_TYPE_SCISSORS,
+    betAmount: 0.75,
+    isWin: false,
+  },
+  {
+    playerId: "0xALKE",
+    betType: BET_TYPE_ROCK,
+    betAmount: 1.0,
+    isWin: true,
+  },
+];

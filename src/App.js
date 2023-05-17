@@ -6,8 +6,10 @@ import { SnackbarProvider } from "notistack";
 import { SigningCosmWasmProvider } from './contexts/cosmwasm'
 
 
-import Home from "./pages/rps/home";
-import Play from "./pages/rps/play";
+import RPSHome from "./pages/rps/home";
+import RPSPlay from "./pages/rps/play";
+import FlipHome from "./pages/flip/home";
+import FlipPlay from "./pages/flip/play";
 
 function App() {
 
@@ -17,8 +19,10 @@ function App() {
         <SigningCosmWasmProvider>
           <Router>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/play" element={<Play />} />
+              <Route path="/flip" element={<FlipHome />} />
+              <Route path="/flip_play" element={<FlipPlay />} />
+              <Route path="/" element={<RPSHome />} />
+              <Route path="/rps_play" element={<RPSPlay />} />
             </Routes>
           </Router>
         </SigningCosmWasmProvider>
