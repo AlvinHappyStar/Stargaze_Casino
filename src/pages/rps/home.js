@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Container, Typography } from "@mui/material";
-import Navbar from "../components/navbar";
+import Navbar from "../../components/navbar";
 
-import { useSigningClient } from '../contexts/cosmwasm'
+import { useSigningClient } from '../../contexts/cosmwasm'
 
 import dayjs from 'dayjs'
 
-import { BET_TYPE_PAPER, BET_TYPE_ROCK, BET_TYPE_SCISSORS } from "../config";
+import { BET_TYPE_PAPER, BET_TYPE_ROCK, BET_TYPE_SCISSORS } from "../../config";
 
 function Home() {
   const navigate = useNavigate();

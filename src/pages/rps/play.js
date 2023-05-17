@@ -4,11 +4,11 @@ import { toast } from "react-toastify";
 
 import { useWallet } from "@solana/wallet-adapter-react";
 
-import Navbar from "../components/navbar";
-import SelectBet from "../components/selectBet";
-import CheckBet from "../components/checkBet";
+import Navbar from "../../components/navbar";
+import SelectBet from "../../components/rps/selectBet";
+import CheckBet from "../../components/rps/checkBet";
 
-import { useSigningClient } from '../contexts/cosmwasm'
+import { useSigningClient } from '../../contexts/cosmwasm'
 
 function Play() {
   const [isBetState, setIsBetState] = useState(true);

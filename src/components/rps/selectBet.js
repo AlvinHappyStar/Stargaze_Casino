@@ -12,7 +12,7 @@ import {
   BET_TYPE_ROCK,
   BET_TYPE_SCISSORS,
   SUPPORTED_TOKEN_INFO,
-} from "../config";
+} from "../../config";
 
 const supportedTokenInfo = SUPPORTED_TOKEN_INFO;
 export default function SelectBet({ resetBetPrice, resetBetType }) {

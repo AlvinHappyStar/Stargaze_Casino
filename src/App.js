@@ -6,8 +6,8 @@ import { SnackbarProvider } from "notistack";
 import { SigningCosmWasmProvider } from './contexts/cosmwasm'
 
 
-import Home from "./pages/home";
-import Play from "./pages/play";
+import Home from "./pages/rps/home";
+import Play from "./pages/rps/play";
 
 function App() {
 

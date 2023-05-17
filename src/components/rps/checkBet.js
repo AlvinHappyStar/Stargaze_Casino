@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Confetti from "react-confetti";
 
-import { BET_TYPE_ROCK, BET_TYPE_PAPER, BET_TYPE_SCISSORS } from "../config";
+import { BET_TYPE_ROCK, BET_TYPE_PAPER, BET_TYPE_SCISSORS } from "../../config";
 
 const RESULT = [
   { txt: "WIN", color: "#1CC700" },
@@ -23,15 +23,17 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
   if (lastResult == null) lastResult = 3
   const [isChecked, setIsChecked] = useState(false);
   const [downCounter, setDownCounter] = useState(3);
-  const [housePickedResult, setHousePickedResult] = useState(BET_TYPE_ROCK);
+  const [housePickedResult, setHousePickedResult] = useState();
 
   const [confettiView, setConfettiView] = useState(false);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (downCounter > 0) {
+      console.log("======downcounter========", downCounter)
+      if (downCounter > -1) {
         setDownCounter(downCounter - 1);
       } else {
+        console.log("-----------lastResult--------", lastResult)
         setConfettiView(lastResult == 0);
         setIsChecked(true);
         setHousePickedResult(GAME_TABLE[selectedBetType][lastResult])
@@ -89,7 +91,7 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
               marginTop: "20px",
               width: { xs: "160px", sm: "220px", md: "300px" },
               aspectRatio: "1",
-              background: `url(images/${downCounter > 0 ? "gray-circle" : housePickedResult
+              background: `url(images/${downCounter > -1 ? "gray-circle" : housePickedResult
                 }.png)`,
               backgroundSize: "contain",
               display: "flex",
@@ -98,7 +100,7 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
               justifyContent: "center",
             }}
           >
-            {downCounter > 0 && (
+            {downCounter > -1 && (
               <Typography
                 sx={{
                   fontSize: { xs: "60px", sm: "120px" },
