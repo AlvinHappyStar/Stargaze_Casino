@@ -45,17 +45,20 @@ function Play() {
       return
     }
 
-    let gameResult = 0;
+    let gameResult = 2;
 
-    // if (currentBetType === "head")
-    //   gameResult = await executeFlip(0, currentBetPrice);
-    // else if(currentBetType === "tail")
-    //   gameResult = await executeFlip(1, currentBetPrice);
+    if (currentBetType === "head")
+      gameResult = await executeFlip(0, currentBetPrice);
+    else if(currentBetType === "tail")
+      gameResult = await executeFlip(1, currentBetPrice);
     
     console.log("--------gameresult------", gameResult);
     setLastResult(gameResult);
     
-    setIsBetState(false);
+    if(gameResult === 2 || gameResult === undefined || gameResult === null)
+      setIsBetState(true);
+    else
+      setIsBetState(false);
   };
 
   const onClickPlayAgainButton = () => {

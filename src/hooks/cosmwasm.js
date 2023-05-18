@@ -45,7 +45,8 @@ export const useSigningCosmWasmClient = () => {
   const [nativeBalance, setNativeBalance] = useState(0)
 
   const [config, setConfig] = useState({ owner: '', enabled: true, denom: null, treasury_amount: 0, flip_count: 0 })
-  const [RPShistoryList, setHistoryList] = useState([])
+  const [RPShistoryList, setRHistoryList] = useState([])
+  const [FliphistoryList, setFHistoryList] = useState([])
 
   // const { success: successNotification, error: errorNotification } = useNotification()
 
@@ -200,6 +201,47 @@ export const useSigningCosmWasmClient = () => {
         // else
         //   errorNotification({ title: `You Lose`, txHash: result.transactionHash })
       }
+      else
+        return undefined;
+    } catch (error) {
+      setLoading(false)
+      notify(false, `Flip error : ${error}`)
+    }
+  }
+
+  const executeFlip = async (level, price) => {
+    setLoading(true)
+    try {
+
+      const result = await signingClient?.execute(
+        walletAddress, // sender address
+        PUBLIC_COINFLIP_CONTRACT, // token escrow contract
+        {
+          "flip":
+          {
+            "level": level,
+          }
+        },
+        defaultFee,
+        undefined,
+        [coin(parseInt(convertDenomToMicroDenom(price), 10), PUBLIC_STAKING_DENOM)]
+      )
+      setLoading(false)
+      getBalances()
+      if (result && result.transactionHash) {
+
+        const response = await signingClient.getTx(result.transactionHash)
+        let log_json = JSON.parse(response.rawLog)
+        let wasm_events = log_json[0].events[5].attributes
+
+        console.log("==============flip_res============", wasm_events);
+
+        return parseInt(wasm_events[4].value);
+        // if (wasm_events[4].value == 'true') 
+        //   successNotification({ title: `You Win`, txHash: result.transactionHash })
+        // else
+        //   errorNotification({ title: `You Lose`, txHash: result.transactionHash })
+      }
     } catch (error) {
       setLoading(false)
       console.log("st", error)
@@ -248,12 +290,33 @@ export const useSigningCosmWasmClient = () => {
     setLoading(true)
     try {
       const response = await signingClient.queryContractSmart(PUBLIC_COINFLIP_CONTRACT, {
-        history: { count: 5 }
+        ristory_msg: { count: 5 }
       })
 
       console.log("=========", response)
 
-      setHistoryList(response.list)
+      setRHistoryList(response.list)
+      setLoading(false)
+
+      notify(true, 'Successfully got History')
+    } catch (error) {
+      setLoading(false)
+
+      notify(false, `GetHistory Error : ${error}`)
+      console.log(error)
+    }
+  }
+
+  const getFlipHistory = async () => {
+    setLoading(true)
+    try {
+      const response = await signingClient.queryContractSmart(PUBLIC_COINFLIP_CONTRACT, {
+        fistory_msg: { count: 5 }
+      })
+
+      console.log("=========", response)
+
+      setFHistoryList(response.list)
       setLoading(false)
 
       notify(true, 'Successfully got History')
@@ -283,9 +346,13 @@ export const useSigningCosmWasmClient = () => {
     nativeBalance,
 
     executeRPS,
+    executeFlip,
     executeRemoveTreasury,
 
     getRPSHistory,
-    RPShistoryList
+    RPShistoryList,
+
+    getFlipHistory,
+    FliphistoryList
   }
 }

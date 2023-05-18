@@ -22,7 +22,7 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
   if (lastResult == null) lastResult = 2
   const [isChecked, setIsChecked] = useState(false);
   const [downCounter, setDownCounter] = useState(3);
-  const [housePickedResult, setHousePickedResult] = useState();
+  const [housePickedResult, setHousePickedResult] = useState("head");
 
   const [confettiView, setConfettiView] = useState(false);
 
@@ -38,7 +38,7 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
   useEffect(() => {
     const intervalId = setInterval(() => {
       console.log("======downcounter========", downCounter)
-      if (downCounter > -1) {
+      if (downCounter > 0) {
         setDownCounter(downCounter - 1);
       } else {
         console.log("-----------lastResult--------", lastResult)
@@ -99,14 +99,14 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
               marginTop: "20px",
               width: { xs: "160px", sm: "220px", md: "300px" },
               aspectRatio: "1",
-              background: `url(images/${downCounter > -1 ? selectedBetType : housePickedResult
+              background: `url(images/${downCounter > 0 ? selectedBetType : housePickedResult
                 }.png)`,
               backgroundSize: "contain",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              animation: downCounter > -1 ? `${animation} 3s forwards` : 'none',
+              animation: `${animation} 4s forwards`,
             }}/>
         </Grid>
       </Grid>

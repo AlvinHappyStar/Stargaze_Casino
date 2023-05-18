@@ -7,8 +7,6 @@ import { useSigningClient } from '../../contexts/cosmwasm'
 
 import dayjs from 'dayjs'
 
-import { BET_TYPE_PAPER, BET_TYPE_ROCK, BET_TYPE_SCISSORS } from "../../config";
-
 function Home() {
   const navigate = useNavigate();
 
@@ -17,29 +15,29 @@ function Home() {
   var relativeTime = require('dayjs/plugin/relativeTime')
   dayjs.extend(relativeTime)
 
-  // const { 
-  //   walletAddress,
-  //   signingClient,
-  //   getHistory,
-  //   historyList
+  const { 
+    walletAddress,
+    signingClient,
+    getFlipHistory,
+    FliphistoryList
 
-  // } = useSigningClient()
+  } = useSigningClient()
 
-  // useEffect(() => {
-  //   if (!signingClient || walletAddress.length === 0) {      
-  //     setPlayHistory(null)
-  //     return
-  //   }
+  useEffect(() => {
+    if (!signingClient || walletAddress.length === 0) {      
+      setPlayHistory(null)
+      return
+    }
     
-  //   getHistory();
-  // }, [signingClient, walletAddress])
+    getFlipHistory();
+  }, [signingClient, walletAddress])
 
-  // useEffect(() => {
-  //   if (historyList == null) {
-  //     return
-  //   }
-  //   setPlayHistory(historyList)
-  // }, [historyList])
+  useEffect(() => {
+    if (FliphistoryList === null) {
+      return
+    }
+    setPlayHistory(FliphistoryList)
+  }, [FliphistoryList])
 
   return (
     <>
@@ -141,6 +139,7 @@ function Home() {
                       sx={{
                         color: "#FFC700",
                         textTransform: "lowercase!important",
+                        textAlign:"center",
                       }}
                     >
                       {item.address.substring(0,12) + "..." + item.address.substring(item.address.length - 6, item.address.length)}
@@ -149,9 +148,10 @@ function Home() {
                       sx={{
                         display: { xs: "none", sm: "flex" },
                         color: "black",
+                        textAlign:"center",
                       }}
                     >
-                      PLAYED {item.level == 0 ? 'ROCK' : (item.level == 1 ? 'SCISSORS' : 'PAPER')} FOR
+                      PLAYED {item.level === 0 ? 'HEAD' : 'TAIL'} FOR
                     </Typography>
                     <Typography
                       sx={{
@@ -159,11 +159,12 @@ function Home() {
                         color: "black",
                       }}
                     >
-                      {item.level == 0 ? 'ROCK' : (item.level == 1 ? 'SCISSORS' : 'PAPER')}
+                      {item.level === 0 ? 'HEAD' : 'TAIL'}
                     </Typography>
                     <Typography
                       sx={{
                         color: "#FFC700",
+                        textAlign:"center",
                       }}
                     >
                       {parseInt(item.bet_amount)/1000000} STARS
@@ -172,16 +173,18 @@ function Home() {
                       sx={{
                         display: { xs: "none", sm: "flex" },
                         color: "black",
+                        textAlign:"center",
                       }}
                     >
                       AND
                     </Typography>
                     <Typography
                       sx={{
-                        color: item.win == 0 ? "#1CC700" : "#FF0000",
+                        color: item.win === 0 ? "#1CC700" : "#FF0000",
+                        textAlign:"center",
                       }}
                     >
-                      {item.win == 0 ? "WON" : (item.win == 1 ? "TIE" :"LOST")}
+                      {item.win === 0 ? "WON" : "LOST"}
                     </Typography>
                   </Box>
                   <Typography
@@ -191,6 +194,7 @@ function Home() {
                       fontSize: { xs: "10px", sm: "12px", md: "16px" },
                       color: "black",
                       marginLeft: "20px",
+                      textAlign:"center",
                     }}
                   >
                     { dayjs().to(dayjs(dayjs.unix(item.timestamp))) }
@@ -204,7 +208,7 @@ function Home() {
                       marginLeft: "20px",
                     }}
                   >
-                    35s
+                    { dayjs().to(dayjs(dayjs.unix(item.timestamp))) }
                   </Typography>
                 </Box>
               ))}
@@ -216,30 +220,3 @@ function Home() {
 }
 
 export default Home;
-
-const tempPlayHistory = [
-  {
-    playerId: "0xMERT",
-    betType: BET_TYPE_ROCK,
-    betAmount: 0.25,
-    isWin: true,
-  },
-  {
-    playerId: "0xMBEK",
-    betType: BET_TYPE_PAPER,
-    betAmount: 0.5,
-    isWin: true,
-  },
-  {
-    playerId: "0xCLOK",
-    betType: BET_TYPE_SCISSORS,
-    betAmount: 0.75,
-    isWin: false,
-  },
-  {
-    playerId: "0xALKE",
-    betType: BET_TYPE_ROCK,
-    betAmount: 1.0,
-    isWin: true,
-  },
-];

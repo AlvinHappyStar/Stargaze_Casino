@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSigningClient } from '../contexts/cosmwasm'
+
+const PAGE_TABS = ['COINFLIP', 'RPS'];
+const PAGE_TAB_URLS = ['/', '/rps'];
 
 export default function Navbar() {
   const navigate = useNavigate();
-  
-  const { 
-    walletAddress, 
-    connectWallet, 
-    signingClient, 
-    disconnect, 
-    loading,
+
+  const location = useLocation();
+  const [currentTab, setCurrentTab] = useState(PAGE_TAB_URLS[0]);
+
+  const {
+    walletAddress,
+    connectWallet,
+    signingClient,
+    disconnect,
     getConfig,
-    isAdmin,
     getBalances,
-    nativeBalance,
-    nativeBalanceStr,
   } = useSigningClient()
 
   const handleConnect = () => {
@@ -26,6 +28,11 @@ export default function Navbar() {
       disconnect()
     }
   }
+
+  useEffect(() => {
+    let pathName = location.pathname;
+    setCurrentTab(pathName);
+  }, [location]);
 
   useEffect(() => {
     let account = localStorage.getItem("address")
@@ -85,8 +92,42 @@ export default function Navbar() {
             STARPS
           </Typography>
         </Box>
+        <Box
+          sx={{
+            marginTop: { xs: "30px", sm: "40px", md: "100px" },
+          }}
+        >
+          {PAGE_TAB_URLS.map((item, index) => (
+            <Box
+              sx={{
+                marginLeft: { xs: "10px", sm: "20px", md: "25px" },
+                cursor: "pointer",
+                borderRadius: "10%",
+                borderBottom: item === currentTab || currentTab === (item + "_play") || (index == 0 && currentTab === "/flip_play")? "5px solid #b14444" : "none",
+                padding: "5px",
+                color: "white",
+                fontSize: { xs: "10px", sm: "20px", md: "25px" },
+                fontWeight: "600",
+                textTransform: "none",
+                "&:hover": {
+                  color: "#b14444",
+                  borderBottom: "5px solid white",
+                },
+              }}
+              onClick={() => {
+                if(item.includes("/flip"))
+                  navigate("/");
+                else
+                  navigate(item);
+              }}
+            >
+              {PAGE_TABS[index]}
+            </Box>
+          ))
+          }
+        </Box>
         <Box>
-          <Typography
+          {/* <Typography
             sx={{
               fontSize: { xs: "14px", sm: "18px", md: "32px" },
               fontWeight: "600",
@@ -94,45 +135,34 @@ export default function Navbar() {
             }}
           >
             {nativeBalanceStr}
-          </Typography>
-          {/* <Box
+          </Typography> */}
+          <Box
             sx={{
               marginLeft: { xs: "10px", sm: "20px", md: "30px" },
-              "& .wallet-adapter-button": {
-                width: { xs: "140px", sm: "180px", md: "285px" },
-                height: { xs: "42px", sm: "48px", md: "65px" },
+            }}
+          >
+            <Button
+              sx={{
+                marginLeft: { xs: "2px", sm: "20px", md: "30px" },
+                maxWidth: { xs: "10px", sm: "300px", md: "400px" },
                 borderRadius: "10px",
                 background: "black",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
                 color: "white",
-                fontSize: { xs: "14px", sm: "18px", md: "25px" },
+                fontSize: { xs: "10px", sm: "15px", md: "25px" },
                 fontWeight: "600",
-              },
-            }}
-          >
-            <WalletMultiButton />
-          </Box> */}
-          <Button
-            sx={{
-              width: "290px",
-              height: "65px",
-              marginLeft: "36px",
-              borderRadius: "10px",
-              background: "black",
-              color: "white",
-              fontSize: "20px",
-              fontWeight: "600",
-              textTransform: "none",
-              "&:hover": {
-                background: "black",
-              },
-            }}
-            onClick={handleConnect}
-          >
-            {walletAddress ? walletAddress.substring(0,12) + "..." + walletAddress.substring(walletAddress.length - 6, walletAddress.length) :'Connect Wallet'}
-          </Button>
+                textTransform: "none",
+                "&:hover": {
+                  background: "black",
+                },
+                textOverflow: "ellipsis",
+                overflow: 'hidden',
+              }}
+              onClick={handleConnect}
+            >
+              {walletAddress ? walletAddress.substring(0, 12) + "..." + walletAddress.substring(walletAddress.length - 6, walletAddress.length) : 'Connect Wallet'}
+            </Button>
+          </Box>
+
         </Box>
       </Box>
       <Box

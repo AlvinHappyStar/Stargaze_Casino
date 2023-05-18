@@ -108,7 +108,7 @@ function Home() {
               background: "#F5F5F5",
               padding: { xs: "0 10px", sm: "10px 25px", md: "20px 40px" },
               borderRadius: "10px",
-              marginTop: "10px",
+              marginTop: "10px",              
             }}
           >
             {playHistory?.length > 0 &&
@@ -139,6 +139,7 @@ function Home() {
                       sx={{
                         color: "#FFC700",
                         textTransform: "lowercase!important",
+                        textAlign:"center",
                       }}
                     >
                       {item.address.substring(0,12) + "..." + item.address.substring(item.address.length - 6, item.address.length)}
@@ -147,6 +148,7 @@ function Home() {
                       sx={{
                         display: { xs: "none", sm: "flex" },
                         color: "black",
+                        textAlign: "center",
                       }}
                     >
                       PLAYED {item.level === 0 ? 'ROCK' : (item.level === 1 ? 'SCISSORS' : 'PAPER')} FOR
@@ -162,6 +164,7 @@ function Home() {
                     <Typography
                       sx={{
                         color: "#FFC700",
+                        textAlign: "center",
                       }}
                     >
                       {parseInt(item.bet_amount)/1000000} STARS
@@ -170,6 +173,7 @@ function Home() {
                       sx={{
                         display: { xs: "none", sm: "flex" },
                         color: "black",
+                        textAlign: "center",
                       }}
                     >
                       AND
@@ -177,6 +181,7 @@ function Home() {
                     <Typography
                       sx={{
                         color: item.win === 0 ? "#1CC700" : "#FF0000",
+                        textAlign: "center",
                       }}
                     >
                       {item.win === 0 ? "WON" : (item.win === 1 ? "TIE" :"LOST")}
@@ -189,6 +194,7 @@ function Home() {
                       fontSize: { xs: "10px", sm: "12px", md: "16px" },
                       color: "black",
                       marginLeft: "20px",
+                      textAlign: "center",
                     }}
                   >
                     { dayjs().to(dayjs(dayjs.unix(item.timestamp))) }
@@ -200,9 +206,10 @@ function Home() {
                       fontSize: { xs: "10px", sm: "12px", md: "16px" },
                       color: "black",
                       marginLeft: "20px",
+                      textAlign:"center",
                     }}
                   >
-                    35s
+                    { dayjs().to(dayjs(dayjs.unix(item.timestamp))) }
                   </Typography>
                 </Box>
               ))}

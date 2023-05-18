@@ -22,10 +22,14 @@ let {Provider} = (CosmWasmContext = createContext({
     nativeBalance: 0,
 
     executeRPS:(level) => {},
+    executeFlip:(level) => {},
     executeRemoveTreasury:(level) => {},
 
-    getHistory:() => {},
+    getRPSHistory:() => {},
     RPShistoryList: null,
+
+    getFlipHistory:() => {},
+    FliphistoryList: null,
 
   }))
 

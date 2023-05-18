@@ -23,7 +23,7 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
   if (lastResult == null) lastResult = 3
   const [isChecked, setIsChecked] = useState(false);
   const [downCounter, setDownCounter] = useState(3);
-  const [housePickedResult, setHousePickedResult] = useState();
+  const [housePickedResult, setHousePickedResult] = useState(GAME_TABLE[selectedBetType][lastResult]);
 
   const [confettiView, setConfettiView] = useState(false);
 

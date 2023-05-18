@@ -57,7 +57,10 @@ function Play() {
     console.log("--------gameresult------", gameResult);
     setLastResult(gameResult);
     
-    setIsBetState(false);
+    if(gameResult === 3 || gameResult === undefined || gameResult === null)
+      setIsBetState(true);
+    else
+      setIsBetState(false);
   };
 
   const onClickPlayAgainButton = () => {
