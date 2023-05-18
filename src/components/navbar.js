@@ -212,9 +212,16 @@ export default function Navbar() {
           color: "black",
           textTransform: "none",
           zIndex: "1",
+          display: PAGE_TAB_URLS.includes(currentTab) ? "none" : "flex",
+        }}
+        onClick={() => {
+          if (currentTab === "/rps_play")
+            navigate("/rps");
+          else
+            navigate("/");
         }}
       >
-        Rules
+        Back
       </Button>
     </>
   );

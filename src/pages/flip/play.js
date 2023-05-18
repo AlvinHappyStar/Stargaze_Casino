@@ -17,7 +17,8 @@ function Play() {
   const { 
     walletAddress,
     signingClient,
-    executeFlip
+    executeFlip,
+    nativeBalance
 
   } = useSigningClient()
 
@@ -42,6 +43,11 @@ function Play() {
 
     if (!signingClient || walletAddress.length === 0) {
       toast.error('Please connect wallet first');
+      return
+    }
+
+    if(nativeBalance < currentBetPrice){
+      toast.error("Insufficient Funds");
       return
     }
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from "react-toastify";
 import { connectKeplr } from '../services/keplr'
 import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
@@ -205,7 +206,7 @@ export const useSigningCosmWasmClient = () => {
         return undefined;
     } catch (error) {
       setLoading(false)
-      notify(false, `Flip error : ${error}`)
+      toast.error(`${error}`)
     }
   }
 
@@ -244,8 +245,7 @@ export const useSigningCosmWasmClient = () => {
       }
     } catch (error) {
       setLoading(false)
-      console.log("st", error)
-      notify(false, `Flip error : ${error}`)
+      toast.error(`${error}`)
     }
   }
 
