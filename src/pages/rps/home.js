@@ -159,7 +159,7 @@ function Home() {
                         color: "black",
                       }}
                     >
-                      {item.level === 0 ? 'ROCK' : (item.level === 1 ? 'SCISSORS' : 'PAPER')}
+                      {item.level === 0 ? 'ROCK' : (item.level === 1 ? 'SCISSOR' : 'PAPER')}
                     </Typography>
                     <Typography
                       sx={{

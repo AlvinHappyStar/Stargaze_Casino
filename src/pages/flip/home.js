@@ -206,6 +206,7 @@ function Home() {
                       fontSize: { xs: "10px", sm: "12px", md: "16px" },
                       color: "black",
                       marginLeft: "20px",
+                      textAlign:"center",
                     }}
                   >
                     { dayjs().to(dayjs(dayjs.unix(item.timestamp))) }
