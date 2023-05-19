@@ -15,7 +15,7 @@ export const connectKeplr = async () => {
   // You can get this offline signer from `window.getOfflineSigner(chainId:string)` after load event.
   // And it also injects the helper function to `window.keplr`.
   // If `window.getOfflineSigner` or `window.keplr` is null, Keplr extension may be not installed on browser.
-  if (!window.getOfflineSigner || !window.keplr) {
+  if (!window.keplr) {
     alert('Please install keplr extension')
   } else {
     if (window.keplr.experimentalSuggestChain) {
