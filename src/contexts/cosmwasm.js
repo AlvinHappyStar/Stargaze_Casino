@@ -6,7 +6,7 @@ import {
 let CosmWasmContext;
 
 let {Provider} = (CosmWasmContext = createContext({
-    walletAddress: '',
+    walletAddress: localStorage.getItem("address"),
     client: null,
     signingClient: null,
     loading: false,
