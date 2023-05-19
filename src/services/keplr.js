@@ -10,12 +10,39 @@ import {
 } from '../config'
 
 
+
+async function getKeplr() {
+  if (window.keplr) {
+    return window.keplr;
+  }
+
+  if (document.readyState === "complete") {
+    return window.keplr;
+  }
+
+  return new Promise((resolve) => {
+    const documentStateChange = (event) => {
+      if (
+        event.target && (event.target).readyState === "complete"
+      ) {
+        resolve(window.keplr);
+        document.removeEventListener("readystatechange", documentStateChange);
+      }
+    };
+
+    document.addEventListener("readystatechange", documentStateChange);
+  });
+}
+
+
 export const connectKeplr = async () => {
   // Keplr extension injects the offline signer that is compatible with cosmJS.
   // You can get this offline signer from `window.getOfflineSigner(chainId:string)` after load event.
   // And it also injects the helper function to `window.keplr`.
   // If `window.getOfflineSigner` or `window.keplr` is null, Keplr extension may be not installed on browser.
-  if (!window.keplr) {
+  const keplr = await getKeplr();
+
+  if (!window.getOfflineSigner || !keplr) {
     alert('Please install keplr extension')
   } else {
     if (window.keplr.experimentalSuggestChain) {
