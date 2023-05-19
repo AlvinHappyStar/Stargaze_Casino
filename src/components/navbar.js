@@ -146,7 +146,7 @@ export default function Navbar() {
                 marginLeft: { xs: "2px", sm: "20px", md: "30px" },
                 maxWidth: { xs: "10px", sm: "300px", md: "400px" },
                 borderRadius: "10px",
-                background: "black",
+                background: "#b14444",
                 color: "white",
                 fontSize: { xs: "10px", sm: "15px", md: "25px" },
                 fontWeight: "600",
