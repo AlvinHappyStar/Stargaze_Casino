@@ -7,6 +7,10 @@ export const BET_TYPE_SCISSORS = "scissors";
 export const BET_TYPE_HEAD = "head";
 export const BET_TYPE_TAIL = "tail";
 
+//dice
+export const BET_TYPE_ODD = "odd";
+export const BET_TYPE_EVEN = "even";
+
 export const SUPPORTED_TOKEN_INFO = [
   {
     index: 0,

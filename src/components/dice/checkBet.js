@@ -3,35 +3,29 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import Confetti from "react-confetti";
 import { keyframes } from '@emotion/react';
 
-import { BET_TYPE_HEAD, BET_TYPE_TAIL } from "../../config";
-
 const RESULT = [
   { txt: "WIN", color: "#1CC700" },
   { txt: "LOSE", color: "#000000" },
   { txt: "LOSE", color: "#000000" },
 ];
 
-const GAME_TABLE = {
-  "head": [BET_TYPE_HEAD, BET_TYPE_TAIL, BET_TYPE_TAIL],
-  "tail": [BET_TYPE_TAIL, BET_TYPE_HEAD, BET_TYPE_HEAD],
-}
-
-export default function CheckBet({ selectedBetType, onClickPlayAgainButton, lastResult }) {
+export default function CheckBet({ selectedBetType, onClickPlayAgainButton, lastResult, index }) {
   console.log("BET TYPE --------------------------------> ", selectedBetType);
-  console.log("RESULT --------------------------------> ", lastResult);
-  if (lastResult == null) lastResult = 2
+  console.log("RESULT --------------------------------> ", index);
   const [isChecked, setIsChecked] = useState(false);
   const [downCounter, setDownCounter] = useState(3);
-  const [housePickedResult, setHousePickedResult] = useState(GAME_TABLE[selectedBetType][lastResult]);
+  const [housePickedResult, setHousePickedResult] = useState(index);
 
+  console.log(index);
   const [confettiView, setConfettiView] = useState(false);
 
   const animation = keyframes`
   from {
-    transform: rotateX(0deg);
+    transform: rotateX(0deg) rotateY(3690deg) translateZ(0px);
+
   }
   to {
-    transform: rotateX(2160deg);
+    transform: rotateX(3690deg) rotateY(0deg) translateZ(-10px);
   }
 `;
 
@@ -44,7 +38,7 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
         console.log("-----------lastResult--------", lastResult)
         setConfettiView(lastResult === 0);
         setIsChecked(true);
-        setHousePickedResult(GAME_TABLE[selectedBetType][lastResult])
+        setHousePickedResult(index)
       }
     }, 1000);
     return () => clearInterval(intervalId);
@@ -76,8 +70,9 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
           <Box
             sx={{
               marginTop: "20px",
-              width: { xs: "160px", sm: "220px", md: "300px" },
+              width: { xs: "90px", sm: "120px", md: "200px" },
               aspectRatio: "1",
+              borderRadius: "8px",
               background: `url(images/${selectedBetType}.png)`,
               backgroundSize: "contain",
             }}
@@ -92,21 +87,22 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
               color: "black",
             }}
           >
-            FLIP PICKED
+            PICKED
           </Typography>
           <Box
             sx={{
               marginTop: "20px",
-              width: { xs: "160px", sm: "220px", md: "300px" },
+              width: { xs: "90px", sm: "120px", md: "200px" },
               aspectRatio: "1",
-              background: `url(images/${downCounter > 0 ? selectedBetType : housePickedResult
+              borderRadius: "8px",
+              background: `url(images/${downCounter > 0 ? Math.floor(Math.random() * 6) + 1 : housePickedResult
                 }.png)`,
               backgroundSize: "contain",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              animation: `${animation} 4s forwards`,
+              animation: `${animation} 4s`,
             }}/>
         </Grid>
       </Grid>
