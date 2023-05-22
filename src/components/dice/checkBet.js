@@ -21,11 +21,11 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
 
   const animation = keyframes`
   from {
-    transform: rotateX(0deg) rotateY(3690deg) translateZ(0px);
+    transform: rotateX(45deg) rotateY(45deg) translateZ(0px);
 
   }
   to {
-    transform: rotateX(3690deg) rotateY(0deg) translateZ(-10px);
+    transform: rotateX(150deg) rotateY(150deg) translateZ(-10px);
   }
 `;
 
@@ -95,15 +95,15 @@ export default function CheckBet({ selectedBetType, onClickPlayAgainButton, last
               width: { xs: "90px", sm: "120px", md: "200px" },
               aspectRatio: "1",
               borderRadius: "8px",
-              background: `url(images/${downCounter > 0 ? Math.floor(Math.random() * 6) + 1 : housePickedResult
-                }.png)`,
-              backgroundSize: "contain",
+              background: downCounter > 0 ? "url(images/dice.gif)"  : `url(images/${housePickedResult}.png)`,              
+              backgroundSize: "cover",
+              backgroundPosition:'center',
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              animation: `${animation} 4s`,
-            }}/>
+            }}>
+          </Box>
         </Grid>
       </Grid>
       {isChecked && (

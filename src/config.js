@@ -22,7 +22,7 @@ export const SUPPORTED_TOKEN_INFO = [
 
 
 // # Chain config
-export const NEXT_PUBLIC_COINFLIP_CONTRACT="stars10w7u2vn5auwxxrwnuz3aa8akpr544uwx883smcqzyqfynp8vvqhstr9nw8"
+export const NEXT_PUBLIC_COINFLIP_CONTRACT="stars124mgl369ujcm9sv5c5ezsx68dnrvc6vhxxr7avxtqylkz0s7mlwsy77ag6"
 export const NEXT_PUBLIC_CHAIN_ID="elgafar-1"
 export const NEXT_PUBLIC_CHAIN_NAME="Stargaze Testnet"
 export const NEXT_PUBLIC_CHAIN_BECH32_PREFIX="stars"

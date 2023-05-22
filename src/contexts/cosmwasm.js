@@ -23,6 +23,7 @@ let {Provider} = (CosmWasmContext = createContext({
 
     executeRPS:(level) => {},
     executeFlip:(level) => {},
+    executeDice:(level) => {},
     executeRemoveTreasury:(level) => {},
 
     getRPSHistory:() => {},
@@ -30,6 +31,9 @@ let {Provider} = (CosmWasmContext = createContext({
 
     getFlipHistory:() => {},
     FliphistoryList: null,
+
+    getDiceHistory:() => {},
+    DicehistoryList: null,
 
   }))
 

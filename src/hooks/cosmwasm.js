@@ -48,6 +48,7 @@ export const useSigningCosmWasmClient = () => {
   const [config, setConfig] = useState({ owner: '', enabled: true, denom: null, treasury_amount: 0, flip_count: 0 })
   const [RPShistoryList, setRHistoryList] = useState([])
   const [FliphistoryList, setFHistoryList] = useState([])
+  const [DicehistoryList, setDHistoryList] = useState([])
 
   // const { success: successNotification, error: errorNotification } = useNotification()
 
@@ -249,6 +250,45 @@ export const useSigningCosmWasmClient = () => {
     }
   }
 
+  const executeDice = async (level, price) => {
+    setLoading(true)
+    try {
+
+      const result = await signingClient?.execute(
+        walletAddress, // sender address
+        PUBLIC_COINFLIP_CONTRACT, // token escrow contract
+        {
+          "dice":
+          {
+            "level": level,
+          }
+        },
+        defaultFee,
+        undefined,
+        [coin(parseInt(convertDenomToMicroDenom(price), 10), PUBLIC_STAKING_DENOM)]
+      )
+      setLoading(false)
+      getBalances()
+      if (result && result.transactionHash) {
+
+        const response = await signingClient.getTx(result.transactionHash)
+        let log_json = JSON.parse(response.rawLog)
+        let wasm_events = log_json[0].events[5].attributes
+
+        console.log("==============dice_res============", wasm_events);
+
+        return parseInt(wasm_events[4].value);
+        // if (wasm_events[4].value == 'true') 
+        //   successNotification({ title: `You Win`, txHash: result.transactionHash })
+        // else
+        //   errorNotification({ title: `You Lose`, txHash: result.transactionHash })
+      }
+    } catch (error) {
+      setLoading(false)
+      toast.error(`${error}`)
+    }
+  }
+
   const executeRemoveTreasury = async (amount) => {
     setLoading(true)
 
@@ -328,6 +368,27 @@ export const useSigningCosmWasmClient = () => {
     }
   }
 
+  const getDiceHistory = async () => {
+    setLoading(true)
+    try {
+      const response = await signingClient.queryContractSmart(PUBLIC_COINFLIP_CONTRACT, {
+        distory_msg: { count: 5 }
+      })
+
+      console.log("=========", response)
+
+      setDHistoryList(response.list)
+      setLoading(false)
+
+      notify(true, 'Successfully got History')
+    } catch (error) {
+      setLoading(false)
+
+      notify(false, `GetHistory Error : ${error}`)
+      console.log(error)
+    }
+  }
+
   return {
     walletAddress,
     signingClient,
@@ -347,12 +408,16 @@ export const useSigningCosmWasmClient = () => {
 
     executeRPS,
     executeFlip,
+    executeDice,
     executeRemoveTreasury,
 
     getRPSHistory,
     RPShistoryList,
 
     getFlipHistory,
-    FliphistoryList
+    FliphistoryList,
+
+    getDiceHistory,
+    DicehistoryList
   }
 }

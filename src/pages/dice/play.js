@@ -19,7 +19,7 @@ function Play() {
   const {
     walletAddress,
     signingClient,
-    executeFlip,
+    executeDice,
     nativeBalance
 
   } = useSigningClient()
@@ -53,12 +53,12 @@ function Play() {
       return
     }
 
-    let gameResult = null;
+    let gameResult = 6;
 
-    // if (currentBetType === "head")
-    //   gameResult = await executeFlip(0, currentBetPrice);
-    // else if(currentBetType === "tail")
-    //   gameResult = await executeFlip(1, currentBetPrice);
+    if (currentBetType === "odd")
+      gameResult = await executeDice(0, currentBetPrice);
+    else if (currentBetType === "even")
+      gameResult = await executeDice(1, currentBetPrice);
 
     console.log("--------gameresult------", gameResult);
     if (gameResult != 6) {
@@ -72,10 +72,10 @@ function Play() {
 
 
 
-    // if(gameResult === 6 || gameResult === undefined || gameResult === null)
-    //   setIsBetState(true);
-    // else
-    setIsBetState(false);
+    if (gameResult === 6 || gameResult === undefined || gameResult === null)
+      setIsBetState(true);
+    else
+      setIsBetState(false);
   };
 
   const onClickPlayAgainButton = () => {

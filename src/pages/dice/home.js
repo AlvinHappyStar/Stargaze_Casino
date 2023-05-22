@@ -18,8 +18,8 @@ function Home() {
   const { 
     walletAddress,
     signingClient,
-    getFlipHistory,
-    FliphistoryList
+    getDiceHistory,
+    DicehistoryList
 
   } = useSigningClient()
 
@@ -29,15 +29,15 @@ function Home() {
       return
     }
     
-    getFlipHistory();
+    getDiceHistory();
   }, [signingClient, walletAddress])
 
   useEffect(() => {
-    if (FliphistoryList === null) {
+    if (DicehistoryList === null) {
       return
     }
-    setPlayHistory(FliphistoryList)
-  }, [FliphistoryList])
+    setPlayHistory(DicehistoryList)
+  }, [DicehistoryList])
 
   return (
     <>

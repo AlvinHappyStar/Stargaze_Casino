@@ -20,11 +20,11 @@ function App() {
         <SigningCosmWasmProvider>
           <Router>
             <Routes>
-              <Route path="/flip" element={<FlipHome />} />
+              <Route path="/" element={<FlipHome />} />
               <Route path="/flip_play" element={<FlipPlay />} />
               <Route path="/rps" element={<RPSHome />} />
               <Route path="/rps_play" element={<RPSPlay />} />
-              <Route path="/" element={<DiceHome />} />
+              <Route path="/dice" element={<DiceHome />} />
               <Route path="/dice_play" element={<DicePlay />} />
             </Routes>
           </Router>
