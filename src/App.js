@@ -11,6 +11,8 @@ import FlipHome from "./pages/flip/home";
 import FlipPlay from "./pages/flip/play";
 import DiceHome from "./pages/dice/home";
 import DicePlay from "./pages/dice/play";
+import RouletteHome from "./pages/roulette/home";
+import RoulettePlay from "./pages/roulette/play";
 
 function App() {
 
@@ -26,6 +28,8 @@ function App() {
               <Route path="/rps_play" element={<RPSPlay />} />
               <Route path="/dice" element={<DiceHome />} />
               <Route path="/dice_play" element={<DicePlay />} />
+              <Route path="/roulette" element={<RouletteHome />} />
+              <Route path="/roulette_play" element={<RoulettePlay />} />
             </Routes>
           </Router>
         </SigningCosmWasmProvider>

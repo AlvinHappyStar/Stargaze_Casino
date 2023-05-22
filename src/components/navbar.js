@@ -3,8 +3,8 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSigningClient } from '../contexts/cosmwasm'
 
-const PAGE_TABS = ['COINFLIP', 'RPS', 'DICE'];
-const PAGE_TAB_URLS = ['/', '/rps', '/dice'];
+const PAGE_TABS = ['COINFLIP', 'RPS', 'DICE', 'ROULETTE'];
+const PAGE_TAB_URLS = ['/', '/rps', '/dice', '/roulette'];
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -219,6 +219,8 @@ export default function Navbar() {
             navigate("/rps");
           else if(currentTab === "/dice_play")
             navigate("/dice");
+          else if(currentTab === "/roulette_play")
+            navigate("/roulette");
           else
             navigate("/");
         }}

@@ -49,6 +49,7 @@ export const useSigningCosmWasmClient = () => {
   const [RPShistoryList, setRHistoryList] = useState([])
   const [FliphistoryList, setFHistoryList] = useState([])
   const [DicehistoryList, setDHistoryList] = useState([])
+  const [RoulettehistoryList, setBHistoryList] = useState([])
 
   // const { success: successNotification, error: errorNotification } = useNotification()
 
@@ -289,6 +290,45 @@ export const useSigningCosmWasmClient = () => {
     }
   }
 
+  const executeRoulette = async (level, price) => {
+    setLoading(true)
+    try {
+
+      const result = await signingClient?.execute(
+        walletAddress, // sender address
+        PUBLIC_COINFLIP_CONTRACT, // token escrow contract
+        {
+          "roulette":
+          {
+            "level": level,
+          }
+        },
+        defaultFee,
+        undefined,
+        [coin(parseInt(convertDenomToMicroDenom(price), 10), PUBLIC_STAKING_DENOM)]
+      )
+      setLoading(false)
+      getBalances()
+      if (result && result.transactionHash) {
+
+        const response = await signingClient.getTx(result.transactionHash)
+        let log_json = JSON.parse(response.rawLog)
+        let wasm_events = log_json[0].events[5].attributes
+
+        console.log("==============roulette_res============", wasm_events);
+
+        return parseInt(wasm_events[4].value);
+        // if (wasm_events[4].value == 'true') 
+        //   successNotification({ title: `You Win`, txHash: result.transactionHash })
+        // else
+        //   errorNotification({ title: `You Lose`, txHash: result.transactionHash })
+      }
+    } catch (error) {
+      setLoading(false)
+      toast.error(`${error}`)
+    }
+  }
+
   const executeRemoveTreasury = async (amount) => {
     setLoading(true)
 
@@ -389,6 +429,27 @@ export const useSigningCosmWasmClient = () => {
     }
   }
 
+  const getRouletteHistory = async () => {
+    setLoading(true)
+    try {
+      const response = await signingClient.queryContractSmart(PUBLIC_COINFLIP_CONTRACT, {
+        bistory_msg: { count: 5 }
+      })
+
+      console.log("=========", response)
+
+      setBHistoryList(response.list)
+      setLoading(false)
+
+      notify(true, 'Successfully got History')
+    } catch (error) {
+      setLoading(false)
+
+      notify(false, `GetHistory Error : ${error}`)
+      console.log(error)
+    }
+  }
+
   return {
     walletAddress,
     signingClient,
@@ -409,6 +470,7 @@ export const useSigningCosmWasmClient = () => {
     executeRPS,
     executeFlip,
     executeDice,
+    executeRoulette,
     executeRemoveTreasury,
 
     getRPSHistory,
@@ -418,6 +480,9 @@ export const useSigningCosmWasmClient = () => {
     FliphistoryList,
 
     getDiceHistory,
-    DicehistoryList
+    DicehistoryList,
+
+    getRouletteHistory,
+    RoulettehistoryList
   }
 }

@@ -1,0 +1,530 @@
+$color-black: rgb(3, 3, 3);
+$color-green: rgb(0, 118, 31);
+$color-red: rgb(172, 25, 9);
+$color-grey: rgb(52, 52, 52);
+$color-grey-2: rgb(57, 57, 57);
+$color-grey-dark: rgb(18, 18, 18);
+$color-grey-dark-2: rgb(23, 23, 23);
+$color-grey-light: rgb(212, 212, 212);
+.App {
+  text-align: center;
+  position: relative;
+  background-color: $color-grey;
+  min-height: 100vh;
+  width: 100%;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family: "Raleway", sans-serif;
+}
+.header {
+  margin-bottom: 20px;
+  color: white;
+}
+.game {
+  padding: 20px;
+  background-color: $color-grey-dark;
+  margin-right: -75px;
+  border-radius: 4px;
+}
+.display {
+  background-color: $color-green;
+  padding-left: 40px;
+  border: 2px solid black;
+}
+.board {
+  // background-color: $color-green;
+  position: relative;
+  padding: 20px 20px 20px 60px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+body {
+  font-size: 18px;
+}
+
+.button {
+  border-radius: 5px;
+  border: 2px solid $color-grey-light;
+  background-image: linear-gradient(
+    to right bottom,
+    rgba(rgb(67, 67, 67), 0.8),
+    rgba($color-grey-2, 0.8)
+  );
+  padding: 15px 30px;
+  margin: 0px 10px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 22px;
+  transform: translate(-1px);
+  cursor: pointer;
+}
+.button:hover {
+  transform: translateY(-2px);
+}
+.button:active {
+  transform: translate(0);
+}
+.stats {
+  &__panel {
+    display: flex;
+    justify-content: center;
+    height: 80px;
+    padding-top: 20px;
+    padding-right: 40px;
+  }
+  &__label {
+    color: $color-grey-dark-2;
+    font-size: 24px;
+
+    &--player {
+      line-height: 40px;
+    }
+  }
+  &__display {
+    width: 33%;
+    font-weight: bold;
+    border: 2px solid white;
+  }
+  &__spin {
+    width: 33%;
+    font-weight: bold;
+    border: 2px solid white;
+    border-left: none;
+    &--label {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 5px;
+    }
+  }
+  &__amount--label {
+    font-size: 20px;
+    font-weight: 700;
+    margin-left: 5px;
+  }
+  &__result {
+    width: 33%;
+    border: 2px solid white;
+    border-left: none;
+    font-size: 12px;
+
+    &--display {
+      font-size: 26px;
+    }
+    &--label {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+    }
+    &--message {
+      color: white;
+    }
+    &--amount {
+      color: $color-grey-dark;
+      font-size: 24px;
+      background-color: white;
+      border-radius: 2px;
+      padding: 0 6px;
+    }
+  }
+}
+
+.spin-result {
+  color: white;
+  width: 50%;
+  height: 40px;
+  margin: 0 auto;
+}
+.result__green {
+  color: $color-green;
+}
+.result__red {
+  color: $color-red;
+}
+.result__black {
+  color: $color-black;
+}
+
+.top-row {
+  display: flex;
+  justify-content: center;
+}
+.middle-row {
+  display: flex;
+  justify-content: center;
+}
+.bottom-row {
+  display: flex;
+  justify-content: center;
+}
+.row-bet {
+  width: 80px;
+  height: 80px;
+  border: 1px solid white;
+  background-color: $color-green;
+  color: white;
+  cursor: pointer;
+}
+
+.zero__bet {
+  width: 80px;
+  height: 245px;
+  background-color: $color-green;
+  position: absolute;
+  left: -50px;
+  // border-top-left-radius: 50px;
+  // border-bottom-left-radius: 50px;
+  color: white;
+  line-height: 240px;
+  border: 1px solid white;
+  cursor: pointer;
+}
+.side-line-1 {
+  display: flex;
+}
+.side-line-2 {
+  display: flex;
+}
+.board__chips {
+  position: relative;
+}
+.thirds-bet {
+  width: 206px;
+  height: 40px;
+  border: 1px solid white;
+  background-color: $color-green;
+  color: white;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+
+  &__height {
+    line-height: 40px;
+    margin-right: 10px;
+  }
+}
+.one-of-two-bet {
+  width: 102px;
+  height: 40px;
+  border: 1px solid white;
+  background-color: $color-green;
+  color: white;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  &__height {
+    line-height: 40px;
+    margin-right: 10px;
+  }
+}
+
+.board-number {
+  width: 50px;
+  height: 80px;
+  border: 1px solid white;
+  align-self: center;
+  color: white;
+  cursor: pointer;
+}
+
+.red {
+  background-color: $color-red;
+}
+.black {
+  background-color: $color-black;
+}
+.selected {
+  background-color: blue;
+}
+.green {
+  background-color: $color-green;
+}
+
+/* betting */
+.bet__options {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  height: 100px;
+  margin-bottom: 10px;
+
+  &--label {
+    color: white;
+    line-height: 80px;
+    font-size: 22px;
+    margin-right: 10px;
+  }
+}
+.bet__image {
+  padding: 10px;
+  width: 75px;
+  cursor: pointer;
+}
+.bet__chips {
+  cursor: pointer;
+}
+.bet__selected {
+  border: 2px solid $color-grey-light;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chip__small {
+  width: 40px;
+  height: 40px;
+}
+
+.screen {
+  display: flex;
+  justify-content: center;
+}
+
+.wheel__image {
+  width: 500px;
+  height: 500px;
+  margin-left: 100px;
+}
+
+.wheel__display {
+  position: relative;
+}
+
+
+.ball__0 {
+  position: absolute;
+  top: 415px;
+  left: 339px;
+}
+.ball__1 {
+  position: absolute;
+  top: 111px;
+  left: 462px;
+}
+.ball__2 {
+  position: absolute;
+  top: 333px;
+  left: 188px;
+}
+.ball__3 {
+  position: absolute;
+  top: 405px;
+  left: 397px;
+}
+.ball__4 {
+  position: absolute;
+  top: 378px;
+  left: 226px;
+}
+.ball__5 {
+  position: absolute;
+  top: 64px;
+  left: 354px;
+}
+.ball__6 {
+  position: absolute;
+  top: 217px;
+  left: 164px;
+}
+.ball__7 {
+  position: absolute;
+  top: 332px;
+  left: 489px;
+}
+.ball__8 {
+  position: absolute;
+  top: 80px;
+  left: 267px;
+}
+.ball__9 {
+  position: absolute;
+  top: 217px;
+  left: 512px;
+}
+.ball__10 {
+  position: absolute;
+  top: 64px;
+  left: 324px;
+}
+.ball__11 {
+  position: absolute;
+  top: 111px;
+  left: 216px;
+}
+.ball__12 {
+  position: absolute;
+  top: 378px;
+  left: 451px;
+}
+.ball__13 {
+  position: absolute;
+  top: 159px;
+  left: 179px;
+}
+.ball__14 {
+  position: absolute;
+  top: 161px;
+  left: 495px;
+}
+.ball__15 {
+  position: absolute;
+  top: 406px;
+  left: 280px;
+}
+.ball__16 {
+  position: absolute;
+  top: 78px;
+  left: 412px;
+}
+.ball__17 {
+  position: absolute;
+  top: 276px;
+  left: 167px;
+}
+.ball__18 {
+  position: absolute;
+  top: 276px;
+  left: 509px;
+}
+.ball__19 {
+  position: absolute;
+  top: 395px;
+  left: 252px;
+}
+.ball__20 {
+  position: absolute;
+  top: 134px;
+  left: 481px;
+}
+.ball__21 {
+  position: absolute;
+  top: 358px;
+  left: 204px;
+}
+.ball__22 {
+  position: absolute;
+  top: 247px;
+  left: 515px;
+}
+.ball__23 {
+  position: absolute;
+  top: 68px;
+  left: 295px;
+}
+.ball__24 {
+  position: absolute;
+  top: 67px;
+  left: 384px;
+}
+.ball__25 {
+  position: absolute;
+  top: 306px;
+  left: 174px;
+}
+.ball__26 {
+  position: absolute;
+  top: 413px;
+  left: 369px;
+}
+.ball__27 {
+  position: absolute;
+  top: 187px;
+  left: 168px;
+}
+.ball__28 {
+  position: absolute;
+  top: 356px;
+  left: 472px;
+}
+.ball__29 {
+  position: absolute;
+  top: 305px;
+  left: 504px;
+}
+.ball__30 {
+  position: absolute;
+  top: 93px;
+  left: 239px;
+}
+.ball__31 {
+  position: absolute;
+  top: 187px;
+  left: 507px;
+}
+.ball__32 {
+  position: absolute;
+  top: 413px;
+  left: 309px;
+}
+.ball__33 {
+  position: absolute;
+  top: 93px;
+  left: 438px;
+}
+.ball__34 {
+  position: absolute;
+  top: 246px;
+  left: 162px;
+}
+.ball__35 {
+  position: absolute;
+  top: 394px;
+  left: 426px;
+}
+.ball__36 {
+  position: absolute;
+  top: 133px;
+  left: 195px;
+}
+
+@media (max-width: 1200px) {
+  .App {
+    height: 150vh;
+  }
+  .screen {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .game {
+    width: 835px;
+    margin-bottom: 25px;
+    margin-left: 100px;
+  }
+  .wheel__display {
+    align-self: left;
+    margin-left: 200px;
+  }
+}
+.ball {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  z-index: 10;
+  margin-top: -520px;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin-left: 750px;
+}
+
+@media (max-width: 900px) {
+  .ball{
+    width: 10px;
+    height: 10px;
+    margin-top: -275px;
+    margin-left: 350px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ball{
+    width: 5px;
+    height: 5px;
+    margin-top: -150px;
+    margin-left: 0px;
+  }
+}
