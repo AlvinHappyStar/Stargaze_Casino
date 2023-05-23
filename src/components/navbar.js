@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSigningClient } from '../contexts/cosmwasm'
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 
 const PAGE_TABS = ['COINFLIP', 'RPS', 'DICE', 'ROULETTE'];
 const PAGE_TAB_URLS = ['/', '/rps', '/dice', '/roulette'];
@@ -12,6 +18,17 @@ export default function Navbar() {
   const location = useLocation();
   const [currentTab, setCurrentTab] = useState(PAGE_TAB_URLS[0]);
 
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const {
     walletAddress,
     connectWallet,
@@ -21,14 +38,6 @@ export default function Navbar() {
     getBalances,
   } = useSigningClient()
 
-  const handleConnect = () => {
-    if (walletAddress.length === 0) {
-      connectWallet(false)
-    } else {
-      disconnect()
-    }
-  }
-
   useEffect(() => {
     let pathName = location.pathname;
     setCurrentTab(pathName);
@@ -36,10 +45,21 @@ export default function Navbar() {
 
   useEffect(() => {
     let account = localStorage.getItem("address")
-    if (account != null) {
-      connectWallet(true)
+    let wallet_type = localStorage.getItem("wallet_type")
+    if (account != null && wallet_type != null) {
+      connectWallet(true, wallet_type)
     }
   }, [])
+
+  const prevOpen = useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
 
   useEffect(() => {
     if (!signingClient || walletAddress.length === 0)
@@ -47,6 +67,25 @@ export default function Navbar() {
     getConfig()
     getBalances()
   }, [walletAddress, signingClient])
+
+  const handleToggle = () => {
+    if (walletAddress.length !== 0) {
+      disconnect();
+      return;
+    }
+
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const authenticate = async (wallet_type) => {
+    if (walletAddress.length === 0) {
+      connectWallet(false, wallet_type)
+    } else {
+      disconnect()
+    }
+
+    setOpen(false);
+  };
 
   return (
     <>
@@ -103,7 +142,7 @@ export default function Navbar() {
                 marginLeft: { xs: "10px", sm: "20px", md: "25px" },
                 cursor: "pointer",
                 borderRadius: "10%",
-                borderBottom: item === currentTab || currentTab === (item + "_play") || (index == 0 && currentTab === "/flip_play")? "5px solid #b14444" : "none",
+                borderBottom: item === currentTab || currentTab === (item + "_play") || (index === 0 && currentTab === "/flip_play") ? "5px solid #b14444" : "none",
                 padding: "5px",
                 color: "white",
                 fontSize: { xs: "10px", sm: "20px", md: "25px" },
@@ -115,7 +154,7 @@ export default function Navbar() {
                 },
               }}
               onClick={() => {
-                if(item.includes("/flip"))
+                if (item.includes("/flip"))
                   navigate("/");
                 else
                   navigate(item);
@@ -144,9 +183,9 @@ export default function Navbar() {
             <Button
               sx={{
                 marginLeft: { xs: "2px", sm: "20px", md: "30px" },
-                maxWidth: { xs: "10px", sm: "300px", md: "400px" },
+                minWidth: { xs: "10px", sm: "100px", md: "200px" },
                 borderRadius: "10px",
-                background: "#b14444",
+                background: "black",
                 color: "white",
                 fontSize: { xs: "10px", sm: "15px", md: "25px" },
                 fontWeight: "600",
@@ -156,11 +195,92 @@ export default function Navbar() {
                 },
                 textOverflow: "ellipsis",
                 overflow: 'hidden',
+                dropShadow: '10px',
+                border: "2px solid white",
               }}
-              onClick={handleConnect}
+              ref={anchorRef}
+              id="composition-button"
+              aria-controls={open ? 'composition-menu' : undefined}
+              aria-expanded={open ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleToggle}
             >
-              {walletAddress ? walletAddress.substring(0, 12) + "..." + walletAddress.substring(walletAddress.length - 6, walletAddress.length) : 'Connect Wallet'}
+              {walletAddress ? walletAddress.substring(0, 12) + "..." + walletAddress.substring(walletAddress.length - 6, walletAddress.length) : 'Connect'}
             </Button>
+            <Popper
+              open={open}
+              anchorEl={anchorRef.current}
+              role={undefined}
+              placement="bottom-start"
+              transition
+              disablePortal
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin:
+                      placement === 'bottom-start' ? 'left top' : 'left bottom',
+                  }}
+                >
+                  <Paper sx={{
+                    width: "200px",
+                    background: "black",
+                    color: "white",
+                    fontSize: { xs: "10px", sm: "15px", md: "25px" },
+                    fontWeight: "600",
+                  }}>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList
+                        autoFocusItem={open}
+                        id="composition-menu"
+                        aria-labelledby="composition-button"
+                      >
+                        <MenuItem sx={{
+                          "&:hover": {
+                            background: "gray",
+                          },
+                        }}
+                          onClick={(e) => { authenticate("keplr") }}>
+                          <img
+                            src="/images/icons/keplr.png"
+                            width={25}
+                            height={25}
+                            style={{marginRight:"10px"}}
+                            alt=""
+                          ></img> Keplr</MenuItem>
+                        <MenuItem sx={{
+                          "&:hover": {
+                            background: "gray",
+                          },
+                        }}
+                          onClick={(e) => { authenticate("leap") }}>
+                          <img
+                            src="/images/icons/leap.png"
+                            width={25}
+                            height={25}
+                            style={{marginRight:"10px"}}
+                            alt=""
+                          ></img> Leap</MenuItem>
+                        <MenuItem sx={{
+                          "&:hover": {
+                            background: "gray",
+                          },
+                        }}
+                          onClick={(e) => { authenticate("cosmostation") }}>
+                          <img
+                            src="/images/icons/cosmostation.png"
+                            width={25}
+                            height={25}
+                            style={{marginRight:"10px"}}
+                            alt=""
+                          ></img> Cosmostation</MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
           </Box>
 
         </Box>
@@ -217,9 +337,9 @@ export default function Navbar() {
         onClick={() => {
           if (currentTab === "/rps_play")
             navigate("/rps");
-          else if(currentTab === "/dice_play")
+          else if (currentTab === "/dice_play")
             navigate("/dice");
-          else if(currentTab === "/roulette_play")
+          else if (currentTab === "/roulette_play")
             navigate("/roulette");
           else
             navigate("/");

@@ -11,7 +11,7 @@ let {Provider} = (CosmWasmContext = createContext({
     signingClient: null,
     loading: false,
     error: null,
-    connectWallet: (inBackground) => {},
+    connectWallet: (inBackground, wallet_type) => {},
     disconnect: () => {},
     getConfig: () => {},
     config: null,

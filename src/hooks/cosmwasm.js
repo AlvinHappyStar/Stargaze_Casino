@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { toast } from "react-toastify";
-import { connectKeplr } from '../services/keplr'
 import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 import {
@@ -14,7 +13,9 @@ import {
   NEXT_PUBLIC_CHAIN_REST_ENDPOINT,
   NEXT_PUBLIC_CHAIN_ID,
   NEXT_PUBLIC_STAKING_DENOM,
-  NEXT_PUBLIC_COINFLIP_CONTRACT
+  NEXT_PUBLIC_COINFLIP_CONTRACT,
+  chainConfig
+
 } from '../config'
 import { NotificationManager } from 'react-notifications'
 // import { create } from 'ipfs-http-client'
@@ -69,18 +70,83 @@ export const useSigningCosmWasmClient = () => {
     else
       NotificationManager.error(str)
   }
-  const connectWallet = async (inBackground) => {
+
+  const getWalletProvider = (wallet_type) => {
+
+    let provider = null;
+    switch (wallet_type) {
+      case "keplr":
+        if (window.keplr) provider = window.keplr;
+        break;
+      case "leap":
+        if (window.leap) provider = window.leap;
+        break;
+      case "cosmostation":
+        if (window.cosmostation) provider = window.cosmostation.providers.keplr;
+        break;
+      default:
+        break;
+    }
+  
+    return provider;
+  }
+
+  const connectWallet = async (inBackground, wallet_type) => {
     if (!inBackground)
       setLoading(true)
 
     try {
-      await connectKeplr()
+      const provider = await getWalletProvider(wallet_type);
+
+      // await connectKeplr()
+
+      if (provider === null) {
+        alert(`Please install ${wallet_type} wallet to continue.`);
+        switch (wallet_type) {
+          case "keplr":
+            window.open("https://www.keplr.app/", "_blank");
+            break;
+          case "leap":
+            window.open("https://leapwallet.io/", "_blank");
+            break;
+          case "cosmostation":
+            window.open("https://cosmostation.io/", "_blank");
+            break;
+          default: break;
+        }
+  
+        return;
+      } else {
+        if (provider.experimentalSuggestChain) {
+          try {
+            await provider.experimentalSuggestChain(chainConfig);
+          } catch (error) {
+            console.log(error);
+            toast.error("Failed to suggest the chain");
+            return;
+          }
+        // } else if(provider?.cosmos?.request) {
+        //   try {
+        //     await provider.cosmos.request({
+        //       method: "cos_addChain",
+        //       params: walletConfig,
+        //     });
+        //   } catch (error) {
+        //     console.log(error);
+        //     toast.error("Failed to add the chain");
+        //     return;
+        //   }
+        } else {
+          toast.warn("Please use the recent version of wallet extension");
+          return;
+        }
+      }
 
       // enable website to access kepler
-      await (window).keplr.enable(PUBLIC_CHAIN_ID)
+      await provider.enable(PUBLIC_CHAIN_ID)
 
       // get offline signer for signing txs
-      const offlineSigner = await (window).getOfflineSignerOnlyAmino(
+      const offlineSigner = await provider.getOfflineSignerOnlyAmino(
         PUBLIC_CHAIN_ID
       )
 
@@ -102,6 +168,7 @@ export const useSigningCosmWasmClient = () => {
       setWalletAddress(address)
 
       localStorage.setItem("address", address)
+      localStorage.setItem("wallet_type", wallet_type);
 
       if (!inBackground) {
         setLoading(false)
@@ -117,8 +184,9 @@ export const useSigningCosmWasmClient = () => {
 
   const disconnect = () => {
     if (signingClient) {
-      localStorage.removeItem("address")
-      signingClient.disconnect()
+      localStorage.removeItem("address");
+      localStorage.removeItem("wallet_type");
+      signingClient.disconnect();
 
     }
     setIsAdmin(false)
